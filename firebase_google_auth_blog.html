@@ -1,0 +1,185 @@
+<html lang=en>
+
+<style>
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  
+}
+</style>
+
+
+
+<p><strong>Table of Contents:</strong></p>
+
+<ol>  
+<li><a href='#demo'>Demo</a></li>        
+<li><a href='#introduction'>Introduction</a></li>
+<li><a href='#what-is-firebase'>What is Firebase ?</a></li>
+
+<li>
+An Example:
+<br>
+<ol>
+
+<li><a href='#SampleApp'>Sample App</a></li>
+<li><a href='#SetupFirebase'>Setup Firebase</a></li>
+<li><a href='#AddingPermissions'>Adding Permissions</a></li>
+<li><a href='#DesigningLayout'>Designing Layout</a></li>
+<li><a href = '#SettingUpMainActivity'>Setting Up MainActivity</a></li>
+<li><a href='#ConfigureGoogleSignIn'>Configure GoogleSignIn</a></li>
+<li><a href='#SignInUser'>SignIn User</a></li>
+<li><a href='#SettingUpSuccessActivity'>Setting Up Success Activity</a></li>
+<li><a href='#LogoutUser'>Logout User</a></li>
+
+
+
+</ol>
+</ol>
+</li>
+</ul>
+<br>
+<br><br>
+
+<h3 id='demo'>Demo</h3>
+<br>
+
+<div class="row justify-content-center">
+
+ <img class = "img-fluid text-center" src="H:\Blogs stuff\FirebaseAuthBlogData\google_signIn_blog_gif.gif"> 
+</div>
+<br><br><br>
+
+
+
+
+
+<h3 id='introduction'>Introduction</h3>
+<br>
+In this blog I'm going to show you how to use Google Sign In using Firebase in Android.<br><br><br>
+
+
+
+<h3 id='what-is-firebase'>What is Firebase ?</h3>
+<br>
+Firebase is a Google's mobile platform which provides backend services like database , storage , authentication etc. Firebase supports
+authentication using email , phone number , Google , Twitter and many more . In this blog we will be covering the Google Sign In only. 
+
+<br><br><br>
+
+
+
+<h3 id='SampleApp'>Sample App</h3>
+<br>
+We will build a simple app which contains three activities :
+<ul>
+<li><b>MainActivity: </b>In this activity Google Sign-in button will be displayed on click of which our sign in process starts.</li>
+<br>
+<li><b>SuccessActivity: </b>After user is successfully logged in then this activity will show the text and contains one button for logout.</li>
+<br>
+</ul>
+<br>
+Enough of theory , Let's begin the code.
+<br><br><br>
+
+
+<h3 id='SetupFirebase'>Setup Firebase</h3>
+<br>
+To setup Firebase in your Android project , check out this <a href = "https://codingwithmitch.com/blog/firebase-phone-authentication/#SetupFirebase"
+target = "_blank">blog</a>.
+<br><br>
+One last thing for using Google Sign is, you need to do these two steps :
+<ul>
+<li>Go back to Firebase console and click on "Project Overview" . In "Discover Firebase" section click on "Authentication" then on next 
+page click on "Setup Sign in method and enable Google Sign in and save it."</li>
+<br><br>
+<li>For creating "GoogleSignInOptions" object and to access basic information of user we need "web_client_id" , In order to get this id 
+go to "Setup Sign in method" and under "Google Sign in" click on "Web SDK Configuration" under this you will get the Web client id.
+</li>
+<br><br>
+</ul>
+<br><br>
+That's all we are done with the initial setup.
+
+<br><br><br>
+
+<h3 id='AddingPermissions'>Adding Permissions</h3>
+<br>
+Open AndroidManifest.xml file and add the following code , We need Internet permission for signing in to your Google account.
+<br><br>
+<script src="https://gist.github.com/Manik1094/acfb6883e82b12c03eba4e95d79c7253.js"></script>
+<br><br><br>  
+
+<h3 id='DesigningLayout'>Designing Layout</h3>
+<br>
+Open activity_main.xml file and add the following code , This contains one inbuilt button for Google signin.
+<br><br>
+<script src="https://gist.github.com/Manik1094/31222a43de1ea679f387137affbf5556.js"></script>
+<br><br><br> 
+
+<h3 id='SettingUpMainActivity'>Setting Up MainActivity</h3>
+<br>
+Open MainActivity.java file and add the following code . We are creating objects of our button , FirebaseAuth , GoogleSignInClient and finding the reference to the objects using findViewById() method.
+<br><br>
+<script src="https://gist.github.com/Manik1094/6d77188e92a8622b5745f767d835adce.js"></script>
+<br><br><br>
+
+<h3 id='ConfigureGoogleSignIn'>Configure GoogleSignIn</h3>
+<br>
+First step is to configure Google SignIn to request the user data required by your app . In order to do that create a GoogleSignInOptions object
+with the DEFAULT_SIGN_IN parameter and attach the web_client_id in requestToken() method.  
+<br><br>
+Next step is to create GoogleSignInClient object through the GoogleSignInOptions object . GoogleSignInClient is a class used for interacting with the Google SignIn API.
+<br><br>
+Open MainActivity.java file and add the following code , we are creating a GoogleSignInClient through GoogleSignInOptions object.
+<br><br>
+
+<script src="https://gist.github.com/Manik1094/8fb0b7baf8ece846ddee23519bdbf961.js"></script>
+<br><br><br>
+
+
+<h3 id='SignInUser'>SignIn User</h3>
+<br>
+Open MainActivity.java file and add the following code . On Click of button we are calling our custom method named signIn() .
+<br><br>
+<b>What is getSignInIntent() ?</b>
+<br><br>
+This is a pre-defined method in GoogleSignInClient class . This returns an Intent to start the flow of Google SignIn by calling startActivityForResult() . 
+<br><br>
+After launching an Intent , the result will be received in onActivityResult() , in which we are signing in to your Google account . If 
+Google SignIn is successful then we try to authenicate with Firebase , for this we have created our custom method named "firebaseAuthWithGoogle()" passing in
+the Google account on which sign in was successful. 
+<br><br>
+Inside this method , get an ID token from your Google account and exchange it with FirebaseAuth credential and authenicate with firebase using Firebase credential
+if result is successful then send an intent to SuccessActivity else show the Toast .
+<br><br>
+<script src="https://gist.github.com/Manik1094/732ae20480cc9f99d4dd94aadb1e1f0d.js"></script>
+<br><br><br>
+
+<h3 id='SettingUpSuccessActivity'>Setting Up Success Activity</h3>
+<br>
+Create new empty activity named Success Activity and inside activity_success.xml file add the following code . It contains one button for logout and text which shows "SignIn success" .
+<br><br>
+<script src="https://gist.github.com/Manik1094/93846ea57b765c7510ddd9cace95f1de.js"></script>
+<br><br><br>
+
+<h3 id='LogoutUser'>Logout User</h3>
+<br>
+Open SuccessActivity.java file and add the following code . On click of button we simply logout the user from an account .
+<br><br>
+<script src="https://gist.github.com/Manik1094/e5ecc0cc0f3e8ef9fcf0025a20315ff1.js"></script>
+<br><br><br>
+
+That's All! Happy Coding!
+<br><br><br>
+
+
+The complete code is available <a href="https://github.com/Manik1094/GoogleSignInExample" target="_blank" rel="nofollow">here</a>.
+<br><br><br>
+
+
+
+
+
+</html>
